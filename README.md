@@ -61,6 +61,106 @@ const result = await client.completeTask(task.task_id);
 console.log('Evaluation:', result.eval);
 ```
 
+## Command-Line Interface (CLI)
+
+The package includes a powerful CLI tool for interacting with the ERC3 API from the command line.
+
+### Installation
+
+After installing the package globally or locally, the `erc3` command becomes available:
+
+```bash
+# Install globally
+npm install -g erc3-js
+
+# Or use npx without installing
+npx erc3-js <command>
+```
+
+### Usage
+
+```bash
+erc3 <command> [options]
+```
+
+Set your API key as an environment variable:
+```bash
+export ERC3_API_KEY='your-api-key'
+```
+
+### CLI Commands
+
+#### Core Commands
+
+```bash
+# List benchmarks
+erc3 benchmarks
+
+# View benchmark details
+erc3 benchmark store
+
+# Start a session
+erc3 session:start store --workspace my-workspace --name "Test Run"
+
+# Get session status
+erc3 session:status ssn-123
+
+# Search sessions
+erc3 session:search --workspace my-workspace
+
+# Start a task
+erc3 task:start tsk-456
+
+# View task details
+erc3 task:view tsk-456
+
+# Complete a task
+erc3 task:complete tsk-456
+```
+
+#### Store API Commands
+
+```bash
+# List products
+erc3 store:products tsk-456 --limit 3
+
+# View basket
+erc3 store:basket tsk-456
+
+# Add product to basket
+erc3 store:add tsk-456 --sku gpu-h100 --quantity 1
+
+# Remove product from basket
+erc3 store:remove tsk-456 --sku gpu-h100 --quantity 1
+
+# Apply coupon
+erc3 store:coupon:apply tsk-456 --coupon SAVE20
+
+# Remove coupon
+erc3 store:coupon:remove tsk-456
+
+# Checkout
+erc3 store:checkout tsk-456
+```
+
+#### Demo API Commands
+
+```bash
+# Get secret
+erc3 demo:secret tsk-789
+
+# Submit answer
+erc3 demo:answer tsk-789 --answer "secret-value"
+```
+
+### CLI Options
+
+Run `erc3 --help` for complete documentation:
+
+```bash
+erc3 --help
+```
+
 ## API Surface
 
 ### Core Client (ERC3)

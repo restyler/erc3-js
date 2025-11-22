@@ -41,6 +41,27 @@ const store = client.getStoreClient(task);
 const products = await store.listProducts();
 ```
 
+### Using the CLI
+
+You can also use the command-line interface:
+
+```bash
+# Set your API key
+export ERC3_API_KEY='your-api-key'
+
+# List products
+erc3 store:products TASK_ID --limit 3
+
+# View basket
+erc3 store:basket TASK_ID
+
+# Add product
+erc3 store:add TASK_ID --sku gpu-h100 --quantity 1
+
+# Checkout
+erc3 store:checkout TASK_ID
+```
+
 ## API Reference
 
 Base URL: `https://erc.timetoact-group.at/store/{TASK_ID}`
@@ -87,6 +108,11 @@ if (page1.next_offset !== -1) {
     limit: 20
   });
 }
+```
+
+**CLI Example:**
+```bash
+erc3 store:products TASK_ID --offset 0 --limit 3
 ```
 
 **Sample Response:**
@@ -141,6 +167,11 @@ console.log('Items:', basket.items);
 console.log('Total:', basket.total / 100); // Convert cents to dollars
 ```
 
+**CLI Example:**
+```bash
+erc3 store:basket TASK_ID
+```
+
 **Sample Response:**
 ```json
 {
@@ -188,6 +219,11 @@ await store.addToBasket('gpu-h100', 2);
 
 // Add 1 unit (default quantity)
 await store.addToBasket('gpu-a100');
+```
+
+**CLI Example:**
+```bash
+erc3 store:add TASK_ID --sku gpu-h100 --quantity 2
 ```
 
 **Sample Response:**
@@ -269,6 +305,11 @@ console.log('Items purchased:', result.items);
 console.log('Discount applied:', result.discount / 100);
 ```
 
+**CLI Example:**
+```bash
+erc3 store:checkout TASK_ID
+```
+
 **Sample Response:**
 ```json
 {
@@ -322,6 +363,11 @@ await store.applyCoupon('DOGGY25');
 const basket = await store.viewBasket();
 console.log('Discount:', basket.discount / 100);
 console.log('Coupon:', basket.coupon);
+```
+
+**CLI Example:**
+```bash
+erc3 store:coupon:apply TASK_ID --coupon DOGGY25
 ```
 
 **Sample Response:**

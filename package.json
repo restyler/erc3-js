@@ -4,6 +4,9 @@
   "description": "JavaScript ESM client for the ERC3 benchmark evaluation platform",
   "type": "module",
   "main": "src/index.js",
+  "bin": {
+    "erc3": "./bin/erc3.js"
+  },
   "exports": {
     ".": "./src/index.js",
     "./store": "./src/store/index.js",
@@ -20,7 +23,8 @@
     "api-client",
     "esm",
     "store",
-    "demo"
+    "demo",
+    "cli"
   ],
   "author": "",
   "license": "MIT",
@@ -29,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/restyler/erc3-js.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/restyler/erc3-js/issues"
   },
-  "homepage": ""
+  "homepage": "https://github.com/restyler/erc3-js#readme"
 }

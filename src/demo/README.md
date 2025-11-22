@@ -47,6 +47,21 @@ const result = await client.completeTask(task);
 console.log('Evaluation:', result.eval);
 ```
 
+### Using the CLI
+
+You can also use the command-line interface:
+
+```bash
+# Set your API key
+export ERC3_API_KEY='your-api-key'
+
+# Get secret
+erc3 demo:secret TASK_ID
+
+# Submit answer
+erc3 demo:answer TASK_ID --answer "secret-value"
+```
+
 ## API Reference
 
 Base URL: `https://erc.timetoact-group.at/demo/{TASK_ID}`
@@ -70,6 +85,11 @@ curl -X POST \
 ```javascript
 const result = await demo.getSecret();
 console.log('Secret:', result.value);
+```
+
+**CLI Example:**
+```bash
+erc3 demo:secret TASK_ID
 ```
 
 **Sample Response:**
@@ -103,6 +123,11 @@ curl -X POST \
 **JavaScript Example:**
 ```javascript
 await demo.submitAnswer('secret-12345');
+```
+
+**CLI Example:**
+```bash
+erc3 demo:answer TASK_ID --answer "secret-12345"
 ```
 
 **Sample Response:**
