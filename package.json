@@ -1,0 +1,38 @@
+{
+  "name": "erc3-js",
+  "version": "1.0.0",
+  "description": "JavaScript ESM client for the ERC3 benchmark evaluation platform",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./store": "./src/store/index.js",
+    "./demo": "./src/demo/index.js",
+    "./common": "./src/common.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "erc3",
+    "benchmark",
+    "evaluation",
+    "api-client",
+    "esm",
+    "store",
+    "demo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
