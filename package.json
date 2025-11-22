@@ -5,7 +5,9 @@
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "erc3": "./bin/erc3.js"
+    "erc3": "./bin/erc3.js",
+    "erc3-store": "./bin/erc3-store.js",
+    "erc3-demo": "./bin/erc3-demo.js"
   },
   "exports": {
     ".": "./src/index.js",

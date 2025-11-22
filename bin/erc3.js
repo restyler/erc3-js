@@ -1,110 +1,92 @@
 #!/usr/bin/env node
 
 /**
- * ERC3 CLI - Command-line interface for the ERC3 JavaScript SDK
+ * ERC3 CLI - Command-line interface for the ERC3 Core API
+ *
+ * This CLI handles core ERC3 functionality: benchmarks, sessions, and tasks.
+ * For benchmark-specific APIs, use the dedicated CLIs:
+ * - erc3-store: Store API commands
+ * - erc3-demo: Demo API commands
  */
 
 import { handleCoreCommand } from './commands/core.js';
-import { handleStoreCommand } from './commands/store.js';
-import { handleDemoCommand } from './commands/demo.js';
 
 const COMMANDS = {
-  // Core ERC3 commands
-  'benchmarks': { handler: handleCoreCommand, description: 'List available benchmarks' },
-  'benchmark': { handler: handleCoreCommand, description: 'View benchmark details' },
-  'session:start': { handler: handleCoreCommand, description: 'Start a new session' },
-  'session:status': { handler: handleCoreCommand, description: 'Get session status' },
-  'session:search': { handler: handleCoreCommand, description: 'Search sessions' },
-  'session:submit': { handler: handleCoreCommand, description: 'Submit session for evaluation' },
-  'task:start': { handler: handleCoreCommand, description: 'Start a task' },
-  'task:view': { handler: handleCoreCommand, description: 'View task details' },
-  'task:complete': { handler: handleCoreCommand, description: 'Complete a task' },
-  'task:log': { handler: handleCoreCommand, description: 'Log LLM usage for a task' },
-
-  // Store API commands
-  'store:products': { handler: handleStoreCommand, description: 'List products' },
-  'store:basket': { handler: handleStoreCommand, description: 'View shopping basket' },
-  'store:add': { handler: handleStoreCommand, description: 'Add product to basket' },
-  'store:remove': { handler: handleStoreCommand, description: 'Remove product from basket' },
-  'store:coupon:apply': { handler: handleStoreCommand, description: 'Apply coupon code' },
-  'store:coupon:remove': { handler: handleStoreCommand, description: 'Remove coupon' },
-  'store:checkout': { handler: handleStoreCommand, description: 'Checkout basket' },
-
-  // Demo API commands
-  'demo:secret': { handler: handleDemoCommand, description: 'Get task secret' },
-  'demo:answer': { handler: handleDemoCommand, description: 'Submit answer' },
+  'benchmarks': 'List available benchmarks',
+  'benchmark': 'View benchmark details',
+  'session:start': 'Start a new session',
+  'session:status': 'Get session status',
+  'session:search': 'Search sessions',
+  'session:submit': 'Submit session for evaluation',
+  'task:start': 'Start a task',
+  'task:view': 'View task details',
+  'task:complete': 'Complete a task',
+  'task:log': 'Log LLM usage for a task',
 };
 
 function showHelp() {
   console.log(`
-ERC3 CLI - Command-line interface for the ERC3 JavaScript SDK
+ERC3 CLI - Command-line interface for the ERC3 Core API
 
 Usage: erc3 <command> [options]
 
 CORE COMMANDS:
   benchmarks                    List available benchmarks
+
   benchmark <id>                View benchmark details
+    Example: erc3 benchmark store
+
   session:start <benchmark>     Start a new session
     --workspace <name>          Workspace name (required)
     --name <name>               Session name (required)
     --architecture <arch>       Architecture (default: x86_64)
+    Example: erc3 session:start store --workspace my-ws --name "Test"
+
   session:status <session-id>   Get session status
+    Example: erc3 session:status ssn-123
+
   session:search                Search sessions
     --workspace <name>          Filter by workspace
     --benchmark <id>            Filter by benchmark
+    Example: erc3 session:search --workspace my-ws
+
   session:submit <session-id>   Submit session for evaluation
+    Example: erc3 session:submit ssn-123
+
   task:start <task-id>          Start a task
+    Example: erc3 task:start tsk-456
+
   task:view <task-id>           View task details
     --since <timestamp>         Get logs since timestamp
+    Example: erc3 task:view tsk-456
+
   task:complete <task-id>       Complete a task
-  task:log <task-id>            Log LLM usage
+    Example: erc3 task:complete tsk-456
+
+  task:log <task-id>            Log LLM usage for a task
     --model <name>              Model name (required)
     --prompt-tokens <n>         Prompt tokens (required)
     --completion-tokens <n>     Completion tokens (required)
     --duration <sec>            Duration in seconds (required)
+    Example: erc3 task:log tsk-456 --model gpt-4 --prompt-tokens 100 --completion-tokens 50 --duration 2.5
 
-STORE API COMMANDS:
-  store:products <task-id>      List products
-    --offset <n>                Pagination offset (default: 0)
-    --limit <n>                 Page size (default: 20, max: 3)
-  store:basket <task-id>        View shopping basket
-  store:add <task-id>           Add product to basket
-    --sku <sku>                 Product SKU (required)
-    --quantity <n>              Quantity (default: 1)
-  store:remove <task-id>        Remove product from basket
-    --sku <sku>                 Product SKU (required)
-    --quantity <n>              Quantity (default: 1)
-  store:coupon:apply <task-id>  Apply coupon code
-    --coupon <code>             Coupon code (required)
-  store:coupon:remove <task-id> Remove applied coupon
-  store:checkout <task-id>      Checkout basket
-
-DEMO API COMMANDS:
-  demo:secret <task-id>         Get task secret
-  demo:answer <task-id>         Submit answer
-    --answer <text>             Answer text (required)
+BENCHMARK-SPECIFIC CLIS:
+  For Store API commands, use:    erc3-store --help
+  For Demo API commands, use:     erc3-demo --help
 
 ENVIRONMENT VARIABLES:
-  ERC3_API_KEY                  API key for authentication
+  ERC3_API_KEY                  API key for authentication (required)
   ERC3_BASE_URL                 Base URL (default: https://erc.timetoact-group.at)
 
-EXAMPLES:
-  # List benchmarks
-  erc3 benchmarks
+COMMON WORKFLOW:
+  1. List benchmarks:           erc3 benchmarks
+  2. Start a session:           erc3 session:start store --workspace my-ws --name "Test"
+  3. Get session status:        erc3 session:status <session-id>
+  4. Start a task:              erc3 task:start <task-id>
+  5. Use benchmark CLI:         erc3-store products <task-id> --limit 3
+  6. Complete the task:         erc3 task:complete <task-id>
 
-  # Start a session
-  erc3 session:start store --workspace my-workspace --name "Test Run"
-
-  # List products in a store task
-  erc3 store:products task-123 --limit 3
-
-  # Add product to basket
-  erc3 store:add task-123 --sku gpu-h100 --quantity 1
-
-  # Get demo secret
-  erc3 demo:secret task-456
-
-For more information, visit: https://github.com/restyler/erc3-js
+For more information: https://github.com/restyler/erc3-js
 `);
 }
 
@@ -121,12 +103,15 @@ async function main() {
 
   if (!COMMANDS[command]) {
     console.error(`Error: Unknown command '${command}'`);
-    console.error(`Run 'erc3 --help' for usage information.`);
+    console.error(`\nDid you mean to use a benchmark-specific CLI?`);
+    console.error(`  Store API: erc3-store --help`);
+    console.error(`  Demo API:  erc3-demo --help`);
+    console.error(`\nRun 'erc3 --help' for core commands.`);
     process.exit(1);
   }
 
   try {
-    await COMMANDS[command].handler(command, commandArgs);
+    await handleCoreCommand(command, commandArgs);
   } catch (error) {
     console.error('Error:', error.message);
     if (process.env.DEBUG) {

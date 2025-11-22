@@ -63,63 +63,57 @@ console.log('Evaluation:', result.eval);
 
 ## Command-Line Interface (CLI)
 
-The package includes a powerful CLI tool for interacting with the ERC3 API from the command line.
+The package includes **three separate CLI utilities** for interacting with the ERC3 platform:
+
+1. **`erc3`** - Core API (benchmarks, sessions, tasks)
+2. **`erc3-store`** - Store API (products, basket, checkout)
+3. **`erc3-demo`** - Demo API (secrets, answers)
+
+This separation allows you to use each CLI independently, which is especially useful for code agents that only need access to specific benchmark APIs.
 
 ### Installation
-
-After installing the package globally or locally, the `erc3` command becomes available:
 
 ```bash
 # Install globally
 npm install -g erc3-js
 
-# Or use npx without installing
-npx erc3-js <command>
+# After installation, three commands are available:
+erc3 --help
+erc3-store --help
+erc3-demo --help
 ```
 
 ### Running from Git Clone
 
-If you've cloned this repository instead of installing via npm, you can run the CLI directly with Node.js:
+If you've cloned this repository instead of installing via npm:
 
 ```bash
-# From the repository root directory
-ERC3_API_KEY='your-api-key' node bin/erc3.js <command> [options]
-
-# Examples:
+# Core API
 ERC3_API_KEY='your-api-key' node bin/erc3.js benchmarks
-ERC3_API_KEY='your-api-key' node bin/erc3.js session:start store --workspace my-workspace --name "Test Run"
-ERC3_API_KEY='your-api-key' node bin/erc3.js store:products task-123 --limit 3
 
-# Or set the API key as an environment variable first:
-export ERC3_API_KEY='your-api-key'
-node bin/erc3.js benchmarks
-```
+# Store API
+ERC3_API_KEY='your-api-key' node bin/erc3-store.js products task-123 --limit 3
 
-Alternatively, you can use `npm link` to create a global symlink:
+# Demo API
+ERC3_API_KEY='your-api-key' node bin/erc3-demo.js secret task-456
 
-```bash
-# From the repository root
+# Or use npm link to install globally from the repo:
 npm link
-
-# Now use it like a globally installed package
 erc3 benchmarks
-erc3 session:start store --workspace my-workspace --name "Test Run"
+erc3-store products task-123 --limit 3
+erc3-demo secret task-456
 ```
 
-### Usage
-
-```bash
-erc3 <command> [options]
-```
+### Environment Setup
 
 Set your API key as an environment variable:
 ```bash
 export ERC3_API_KEY='your-api-key'
 ```
 
-### CLI Commands
+### CLI 1: Core API (`erc3`)
 
-#### Core Commands
+Handles benchmarks, sessions, and tasks.
 
 ```bash
 # List benchmarks
@@ -145,50 +139,70 @@ erc3 task:view tsk-456
 
 # Complete a task
 erc3 task:complete tsk-456
+
+# Full help
+erc3 --help
 ```
 
-#### Store API Commands
+### CLI 2: Store API (`erc3-store`)
+
+Standalone CLI for the Store benchmark API. Can be used completely independently.
 
 ```bash
-# List products
-erc3 store:products tsk-456 --limit 3
+# List products (note: max limit is 3)
+erc3-store products task-456 --limit 3
 
-# View basket
-erc3 store:basket tsk-456
+# View basket (formatted output)
+erc3-store basket task-456
 
 # Add product to basket
-erc3 store:add tsk-456 --sku gpu-h100 --quantity 1
+erc3-store add task-456 --sku gpu-h100 --quantity 1
 
 # Remove product from basket
-erc3 store:remove tsk-456 --sku gpu-h100 --quantity 1
+erc3-store remove task-456 --sku gpu-h100 --quantity 1
 
 # Apply coupon
-erc3 store:coupon:apply tsk-456 --coupon SAVE20
+erc3-store coupon:apply task-456 --coupon SAVE20
 
 # Remove coupon
-erc3 store:coupon:remove tsk-456
+erc3-store coupon:remove task-456
 
 # Checkout
-erc3 store:checkout tsk-456
+erc3-store checkout task-456
+
+# Get JSON output for programmatic use
+erc3-store products task-456 --json
+
+# Full help
+erc3-store --help
 ```
 
-#### Demo API Commands
+### CLI 3: Demo API (`erc3-demo`)
+
+Standalone CLI for the Demo benchmark API. Can be used completely independently.
 
 ```bash
 # Get secret
-erc3 demo:secret tsk-789
+erc3-demo secret task-789
 
 # Submit answer
-erc3 demo:answer tsk-789 --answer "secret-value"
+erc3-demo answer task-789 --answer "secret-value"
+
+# Complete workflow with shell scripting
+SECRET=$(erc3-demo secret task-789 --json | jq -r '.value')
+erc3-demo answer task-789 --answer "$SECRET"
+
+# Full help
+erc3-demo --help
 ```
 
-### CLI Options
+### Why Separate CLIs?
 
-Run `erc3 --help` for complete documentation:
-
-```bash
-erc3 --help
-```
+The separation allows:
+- **Code agents** to receive only the CLI they need (e.g., just `erc3-store`)
+- **Independent usage** without core API dependencies
+- **Cleaner permissions** when sharing tools with automated systems
+- **Easier testing** of individual benchmark APIs
 
 ## API Surface
 
