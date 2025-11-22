@@ -77,6 +77,35 @@ npm install -g erc3-js
 npx erc3-js <command>
 ```
 
+### Running from Git Clone
+
+If you've cloned this repository instead of installing via npm, you can run the CLI directly with Node.js:
+
+```bash
+# From the repository root directory
+ERC3_API_KEY='your-api-key' node bin/erc3.js <command> [options]
+
+# Examples:
+ERC3_API_KEY='your-api-key' node bin/erc3.js benchmarks
+ERC3_API_KEY='your-api-key' node bin/erc3.js session:start store --workspace my-workspace --name "Test Run"
+ERC3_API_KEY='your-api-key' node bin/erc3.js store:products task-123 --limit 3
+
+# Or set the API key as an environment variable first:
+export ERC3_API_KEY='your-api-key'
+node bin/erc3.js benchmarks
+```
+
+Alternatively, you can use `npm link` to create a global symlink:
+
+```bash
+# From the repository root
+npm link
+
+# Now use it like a globally installed package
+erc3 benchmarks
+erc3 session:start store --workspace my-workspace --name "Test Run"
+```
+
 ### Usage
 
 ```bash
