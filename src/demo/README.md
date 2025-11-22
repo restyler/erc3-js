@@ -49,17 +49,25 @@ console.log('Evaluation:', result.eval);
 
 ### Using the CLI
 
-You can also use the command-line interface:
+The Demo API has its own standalone CLI utility (`erc3-demo`):
 
 ```bash
 # Set your API key
 export ERC3_API_KEY='your-api-key'
 
 # Get secret
-erc3 demo:secret TASK_ID
+erc3-demo secret TASK_ID
 
 # Submit answer
-erc3 demo:answer TASK_ID --answer "secret-value"
+erc3-demo answer TASK_ID --answer "secret-value"
+
+# Get full help
+erc3-demo --help
+```
+
+**From git clone:**
+```bash
+node bin/erc3-demo.js secret TASK_ID
 ```
 
 ## API Reference
@@ -89,7 +97,7 @@ console.log('Secret:', result.value);
 
 **CLI Example:**
 ```bash
-erc3 demo:secret TASK_ID
+erc3-demo secret TASK_ID
 ```
 
 **Sample Response:**
@@ -127,7 +135,7 @@ await demo.submitAnswer('secret-12345');
 
 **CLI Example:**
 ```bash
-erc3 demo:answer TASK_ID --answer "secret-12345"
+erc3-demo answer TASK_ID --answer "secret-12345"
 ```
 
 **Sample Response:**
