@@ -37,9 +37,9 @@ function formatJSON(obj) {
 function formatBasket(basket) {
   console.log('\n=== Shopping Basket ===');
   console.log(`Items: ${basket.items?.length || 0}`);
-  console.log(`Subtotal: $${((basket.subtotal || 0) / 100).toFixed(2)}`);
-  console.log(`Discount: $${((basket.discount || 0) / 100).toFixed(2)}`);
-  console.log(`Total: $${((basket.total || 0) / 100).toFixed(2)}`);
+  console.log(`Subtotal: $${(basket.subtotal || 0).toFixed(2)}`);
+  console.log(`Discount: $${(basket.discount || 0).toFixed(2)}`);
+  console.log(`Total: $${(basket.total || 0).toFixed(2)}`);
   if (basket.coupon) {
     console.log(`Coupon: ${basket.coupon}`);
   }
@@ -47,7 +47,7 @@ function formatBasket(basket) {
   if (basket.items && basket.items.length > 0) {
     console.log('\nItems:');
     basket.items.forEach((item, i) => {
-      console.log(`  ${i + 1}. ${item.sku}: ${item.quantity} x $${(item.price / 100).toFixed(2)}`);
+      console.log(`  ${i + 1}. ${item.sku}: ${item.quantity} x $${(item.price).toFixed(2)}`);
     });
   }
   console.log('');
@@ -62,7 +62,7 @@ function formatProducts(result) {
   if (result.products && result.products.length > 0) {
     result.products.forEach((product, i) => {
       console.log(`${i + 1}. ${product.name} (${product.sku})`);
-      console.log(`   Price: $${(product.price / 100).toFixed(2)}`);
+      console.log(`   Price: $${(product.price).toFixed(2)}`);
       console.log(`   Available: ${product.available}`);
       console.log('');
     });
@@ -169,9 +169,9 @@ export async function handleStoreCommand(command, args) {
         console.log('\n✓ Checkout completed!');
         console.log('\n=== Order Summary ===');
         console.log(`Items: ${result.items?.length || 0}`);
-        console.log(`Subtotal: $${((result.subtotal || 0) / 100).toFixed(2)}`);
-        console.log(`Discount: $${((result.discount || 0) / 100).toFixed(2)}`);
-        console.log(`Total: $${((result.total || 0) / 100).toFixed(2)}`);
+        console.log(`Subtotal: $${(result.subtotal || 0).toFixed(2)}`);
+        console.log(`Discount: $${(result.discount || 0).toFixed(2)}`);
+        console.log(`Total: $${(result.total || 0).toFixed(2)}`);
         if (result.coupon) {
           console.log(`Coupon used: ${result.coupon}`);
         }
@@ -179,7 +179,7 @@ export async function handleStoreCommand(command, args) {
         if (result.items && result.items.length > 0) {
           console.log('\nItems purchased:');
           result.items.forEach((item, i) => {
-            console.log(`  ${i + 1}. ${item.sku}: ${item.quantity} x $${(item.price / 100).toFixed(2)}`);
+            console.log(`  ${i + 1}. ${item.sku}: ${item.quantity} x $${(item.price).toFixed(2)}`);
           });
         }
         console.log('');

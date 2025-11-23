@@ -11,7 +11,7 @@ The Store API is a separate API from the main ERC3 client, designed specifically
 - Apply discount coupons
 - Complete purchases
 
-**Important:** All prices in the API are in **cents** (divide by 100 for display in dollars).
+**Important:** Prices in the API are returned in **dollars**. Do not divide by 100. (Older examples that divided by 100 are incorrect.)
 
 ## Getting Started
 

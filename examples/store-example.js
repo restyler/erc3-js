@@ -55,7 +55,7 @@ async function main() {
       // Show first few products from first page
       if (pageNum === 1) {
         result.products.slice(0, 3).forEach(p => {
-          console.log(`  - ${p.name} (${p.sku}): $${p.price / 100} (${p.available} available)`);
+          console.log(`  - ${p.name} (${p.sku}): $${p.price} (${p.available} available)`);
         });
       }
 
@@ -70,7 +70,7 @@ async function main() {
     const cheapest = allProducts.reduce((min, p) =>
       p.price < min.price ? p : min
     );
-    console.log(`\nCheapest product: ${cheapest.name} ($${cheapest.price / 100})`);
+    console.log(`\nCheapest product: ${cheapest.name} ($${cheapest.price})`);
 
     // Add items to basket
     console.log('\n--- Managing Basket ---');
@@ -96,7 +96,7 @@ async function main() {
 
     basket.items.forEach(item => {
       const product = allProducts.find(p => p.sku === item.sku);
-      console.log(`  - ${product?.name || item.sku}: ${item.quantity} x $${item.price / 100}`);
+      console.log(`  - ${product?.name || item.sku}: ${item.quantity} x $${item.price}`);
     });
 
     // Try applying a coupon (example - may not work for all tasks)
