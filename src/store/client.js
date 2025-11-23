@@ -138,7 +138,7 @@ export class StoreClient {
    * Returns the current state of the shopping basket including items,
    * prices, discounts, and totals.
    *
-   * Note: All prices are in cents (divide by 100 for display)
+ * Note: Prices are returned in dollars (no division needed for display)
    *
    * @returns {Promise<Object>} Basket contents with items, subtotal, discount, total
    *

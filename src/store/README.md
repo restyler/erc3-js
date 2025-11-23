@@ -570,11 +570,7 @@ try {
 
 ## Important Notes
 
-1. **Prices in Cents**: All prices are in cents. Always divide by 100 for display.
-   ```javascript
-   console.log(`$${price / 100}`);
-   ```
-
+1. **Prices in Dollars**: Prices are already in dollars. Do not divide by 100.
 2. **Pagination**: Some benchmarks have very small page limits (e.g., 2-3 items). Always paginate through all results.
 
 3. **Single Coupon**: Only one coupon can be applied at a time. Applying a new coupon replaces the old one.

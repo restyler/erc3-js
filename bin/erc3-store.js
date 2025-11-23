@@ -71,7 +71,7 @@ EXAMPLES:
   erc3-store products task-123 --json
 
 NOTES:
-  - All prices are in cents (divide by 100 for display)
+  - Prices are in dollars (no division needed for display)
   - Maximum page limit is 3 items
   - Only one coupon can be applied at a time
   - Task ID must be from a 'store' benchmark session
