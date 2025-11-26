@@ -60,9 +60,12 @@ export class ERC3 {
    */
   async _request(endpoint, data = {}) {
     const url = `${this.baseUrl}${endpoint}`;
+    const started = Date.now();
+    let response;
+    let rawBody = '';
 
     try {
-      const response = await fetch(url, {
+      response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,28 +73,57 @@ export class ERC3 {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      rawBody = await response.text();
+      const latencyMs = Date.now() - started;
+      console.log(`[erc3] POST ${endpoint} status=${response.status} latency=${latencyMs}ms`);
 
-      // Check for API errors
-      if (result.status && result.status >= 400) {
+      let parsed = null;
+      if (rawBody) {
+        try {
+          parsed = JSON.parse(rawBody);
+        } catch (parseErr) {
+          console.warn(`[erc3] Failed to parse JSON for ${endpoint}:`, parseErr?.message || parseErr);
+        }
+      }
+
+      if (!response.ok) {
+        const detail = rawBody || parsed || response.statusText;
+        console.error(`[erc3] HTTP error for ${endpoint}: status=${response.status} body=${String(rawBody).slice(0, 2000)}`);
         throw new ApiException(
-          result.error || 'API Error',
-          result.status,
-          result.code,
-          JSON.stringify(result)
+          parsed?.error || parsed?.message || `HTTP ${response.status}`,
+          response.status,
+          parsed?.code || 'HTTP_ERROR',
+          detail
         );
       }
 
-      return result;
+      // Check for API errors
+      if (parsed && parsed.status && parsed.status >= 400) {
+        throw new ApiException(
+          parsed.error || 'API Error',
+          parsed.status,
+          parsed.code,
+          rawBody || JSON.stringify(parsed)
+        );
+      }
+
+      if (!parsed) {
+        console.warn(`[erc3] Empty or non-JSON success response for ${endpoint}; body=${String(rawBody).slice(0, 500)}`);
+        return rawBody ? { raw: rawBody } : {};
+      }
+
+      return parsed;
     } catch (error) {
       if (error instanceof ApiException) {
         throw error;
       }
+      const latencyMs = Date.now() - started;
+      console.error(`[erc3] Request failure POST ${endpoint} after ${latencyMs}ms:`, error?.message || error);
       throw new ApiException(
         `Request failed: ${error.message}`,
-        500,
-        'REQUEST_FAILED',
-        error.message
+        error?.status || 500,
+        error?.code || 'REQUEST_FAILED',
+        error?.message
       );
     }
   }
